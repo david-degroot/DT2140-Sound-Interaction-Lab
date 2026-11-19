@@ -126,10 +126,16 @@ process = insects, background : ro.interleave(2, 2) : par(i, 2, sum(j, 2, _))
         trig_data = ((0.1, 500, 5),  (0.15, 300, 3),
                      (0.05, 250, 6), (0.0921, 320, 4),
                      (0.093, 250, 3), (0.09, 300, 2), (0.087, 150, 5));
-        channels = (cricket(5134, 12342),
-                    cricket(3134, 8342),
-                    cricket(8134, 15342),
-                    cricket(6134, 1842),
+        channels = (                    
+                    frog(250, 900),
+                    frog(400, 600),
+                    frog(200, 800),
+                    frog(250, 900),
+                    frog(400, 600),
+                    frog(200, 800),
+                    frog(250, 900),
+                    frog(400, 600),
+                    frog(200, 800),
                     frog(250, 900),
                     frog(400, 600),
                     frog(200, 800));
