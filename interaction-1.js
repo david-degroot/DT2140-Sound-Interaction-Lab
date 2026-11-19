@@ -78,7 +78,7 @@
     let pressure = 0;
     //let popped = false;
     let lastShakeTime = 0;
-    const SHAKE_COOLDOWN = 300;   // milliseconds between bubble sounds
+    const SHAKE_COOLDOWN = 1000;   // milliseconds between bubble sounds
 
     function rotationChange(rotx, roty, rotz) {
         const bottleUpright = rotx > 60 && rotx < 120;
@@ -153,7 +153,7 @@
     }
 
 
-   const MAX_PRESSURE = 15;      // same number you use for the pop
+   const MAX_PRESSURE = 20;      // same number you use for the pop
     function getBubbleMinMax(address) {
         const param = findByAddress(bellNodeParams, address);
         return getParamMinMax(param);
