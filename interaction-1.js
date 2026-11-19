@@ -76,14 +76,14 @@
 
      
     let pressure = 0;
-    const MAX_PRESSURE = 20;      // same number you use for the pop
+    //let popped = false;
     let lastShakeTime = 0;
     const SHAKE_COOLDOWN = 300;   // milliseconds between bubble sounds
 
     function rotationChange(rotx, roty, rotz) {
         const bottleUpright = rotx > 60 && rotx < 120;
         if (bottleUpright && pressure >= MAX_PRESSURE) {
-            
+            //popped = true;
             playAudio();
             //statusLabels[2].style("color", "blue");
         }
@@ -151,7 +151,7 @@
     }
 
 
-   
+   const MAX_PRESSURE = 5;      // same number you use for the pop
     function getBubbleMinMax(address) {
         const param = findByAddress(bellNodeParams, address);
         return getParamMinMax(param);
