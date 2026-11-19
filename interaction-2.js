@@ -11,13 +11,6 @@ let dspNode = null;
 let dspNodeParams = null;
 let jsonParams = null;
 
-// Filter control addresses (copied from the params list in the console)
-const BYPASS    = "/MOOG_VCF__Voltage_Controlled_Filter_/0x00/Bypass";
-const CUTOFF    = "/MOOG_VCF__Voltage_Controlled_Filter_/Corner_Frequency";
-const RESONANCE = "/MOOG_VCF__Voltage_Controlled_Filter_/Corner_Resonance";
-let minCutoff = 0;
-let maxCutoff = 0;
-
 // Change here to ("tuono") depending on your wasm file name
 const dspName = "brass";
 const instance = new FaustWasm2ScriptProcessor(dspName);
@@ -40,14 +33,13 @@ brass.createDSP(audioContext, 1024)
         const jsonString = dspNode.getJSON();
         jsonParams = JSON.parse(jsonString)["ui"][0]["items"];
         dspNodeParams = jsonParams
-
-        // Filter setup: make sure it is active, and add some resonance
-        dspNode.setParamValue(BYPASS, 0);
-        const [minRes, maxRes] = getMinMaxParam(RESONANCE);
-        dspNode.setParamValue(RESONANCE, minRes + 0.6 * (maxRes - minRes));
-
-        // Read the cutoff range once, so we don't look it up on every sensor update
-        [minCutoff, maxCutoff] = getMinMaxParam(CUTOFF);
+        // const exampleMinMaxParam = findByAddress(dspNodeParams, "/thunder/rumble");
+        // // ALWAYS PAY ATTENTION TO MIN AND MAX, ELSE YOU MAY GET REALLY HIGH VOLUMES FROM YOUR SPEAKERS
+        // const [exampleMinValue, exampleMaxValue] = getParamMinMax(exampleMinMaxParam);
+        // console.log('Min value:', exampleMinValue, 'Max value:', exampleMaxValue);
+        // start blowing right away: 60% pressure, not the max
+        const [minP, maxP] = getMinMaxParam("/brass/blower/pressure");
+        dspNode.setParamValue("/brass/blower/pressure", minP + 0.6 * (maxP - minP));
     });
 
 
@@ -67,14 +59,21 @@ function accelerationChange(accx, accy, accz) {
 }
 
 function rotationChange(rotx, roty, rotz) {
-    // 0 = phone flat, 1 = tilted 60 degrees or more
-    const amount = Math.min(Math.abs(rotx), 60) / 60;
-    playAudio(amount);
-    statusLabels[2].html("tilt: " + Math.round(Math.abs(rotx)) + "  amount: " + amount.toFixed(2));
+    if (!dspNode) {
+        return;
+    }
+    const tilt = Math.min(Math.abs(rotx), 90);
+    const amount = tilt / 90;              // 0 = flat, 1 = vertical
+
+    // flat = low frequency (muffled), upright = high frequency (open)
+    const [minFreq, maxFreq] = getMinMaxParam("/MOOG_VCF__Voltage_Controlled_Filter_/Corner_Frequency");
+    const freq = minFreq + amount * (maxFreq - minFreq);
+    dspNode.setParamValue("/MOOG_VCF__Voltage_Controlled_Filter_/Corner_Frequency", freq);
 }
 
 function mousePressed() {
-    audioContext.resume();                
+    // playAudio()
+    // Use this for debugging from the desktop!
 }
 
 function deviceMoved() {
@@ -88,14 +87,13 @@ function deviceTurned() {
 function deviceShaken() {
     shaketimer = millis();
     statusLabels[0].style("color", "pink");
+    playAudio();
 }
 
 function getMinMaxParam(address) {
-    const exampleMinMaxParam = findByAddress(dspNodeParams, address);
+    const param = findByAddress(dspNodeParams, address);
     // ALWAYS PAY ATTENTION TO MIN AND MAX, ELSE YOU MAY GET REALLY HIGH VOLUMES FROM YOUR SPEAKERS
-    const [exampleMinValue, exampleMaxValue] = getParamMinMax(exampleMinMaxParam);
-    console.log('Min value:', exampleMinValue, 'Max value:', exampleMaxValue);
-    return [exampleMinValue, exampleMaxValue]
+    return getParamMinMax(param);
 }
 
 //==========================================================================================
@@ -108,16 +106,15 @@ function getMinMaxParam(address) {
 //
 //==========================================================================================
 
-function playAudio(amount) {
+function playAudio() {
     if (!dspNode) {
         return;
     }
     if (audioContext.state === 'suspended') {
         return;
     }
-    // amount 0 = filter closed (dark, muffled), amount 1 = filter open (bright)
-    const cutoff = minCutoff + amount * (maxCutoff - minCutoff);
-    dspNode.setParamValue(CUTOFF, cutoff);
+    dspNode.setParamValue("/englishBell/gate", 1)
+    setTimeout(() => { dspNode.setParamValue("/englishBell/gate", 0) }, 100);
 }
 
 //==========================================================================================
