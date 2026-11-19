@@ -145,14 +145,22 @@
     }
 
 
-    const MAX_PRESSURE = 25;
+   const MAX_PRESSURE = 25;      // same number you use for the pop
+
     function playBubbles() {
         if (!bellNode || audioContext.state === 'suspended') {
-        return;
+            return;
         }
-            bellNode.setParamValue("/bubble/drop", 1);
-            setTimeout(() => { bellNode.setParamValue("/bubble/drop", 0) }, 100);
-        }
+
+        // map pressure 0..MAX_PRESSURE to the freq range of the bubble
+        const [minFreq, maxFreq] = getBubbleMinMax("/bubble/bubble/freq");
+        const amount = Math.min(pressure / MAX_PRESSURE, 1);    // 0 to 1
+        const freq = minFreq + amount * (maxFreq - minFreq);
+        bellNode.setParamValue("/bubble/bubble/freq", freq);
+
+        bellNode.setParamValue("/bubble/drop", 1);
+        setTimeout(() => { bellNode.setParamValue("/bubble/drop", 0) }, 100);
+    }
 
     //==========================================================================================
     // END
