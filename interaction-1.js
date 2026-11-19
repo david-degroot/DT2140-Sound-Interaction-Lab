@@ -82,12 +82,13 @@
 
     function rotationChange(rotx, roty, rotz) {
         const bottleUpright = rotx > 60 && rotx < 120;
-        if (bottleUpright && pressure > 25) {
-            //popped = true;          // pop only once
+        if (bottleUpright && pressure > MAX_PRESSURE && !popped) {
+            popped = true;
             playAudio();
             statusLabels[2].style("color", "blue");
         }
     }
+
 
     function mousePressed() {
         //playAudio();               // desktop test
