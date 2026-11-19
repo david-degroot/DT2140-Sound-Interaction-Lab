@@ -11,6 +11,11 @@ let dspNode = null;
 let dspNodeParams = null;
 let jsonParams = null;
 
+// Control addresses (copied from the params list in the console)
+const PRESSURE = "/brass/brass/blower/pressure";
+const CUTOFF   = "/brass/MOOG_VCF__Voltage_Controlled_Filter_/Corner_Frequency";
+const BYPASS   = "/brass/MOOG_VCF__Voltage_Controlled_Filter_/0x00/Bypass";
+
 // Change here to ("tuono") depending on your wasm file name
 const dspName = "brass";
 const instance = new FaustWasm2ScriptProcessor(dspName);
@@ -33,13 +38,13 @@ brass.createDSP(audioContext, 1024)
         const jsonString = dspNode.getJSON();
         jsonParams = JSON.parse(jsonString)["ui"][0]["items"];
         dspNodeParams = jsonParams
-        // const exampleMinMaxParam = findByAddress(dspNodeParams, "/thunder/rumble");
-        // // ALWAYS PAY ATTENTION TO MIN AND MAX, ELSE YOU MAY GET REALLY HIGH VOLUMES FROM YOUR SPEAKERS
-        // const [exampleMinValue, exampleMaxValue] = getParamMinMax(exampleMinMaxParam);
-        // console.log('Min value:', exampleMinValue, 'Max value:', exampleMaxValue);
+
         // start blowing right away: 60% pressure, not the max
-        const [minP, maxP] = getMinMaxParam("/brass/brass/blower/pressure");
-        dspNode.setParamValue("/brass/brass/blower/pressure", minP + 0.6 * (maxP - minP));
+        const [minP, maxP] = getMinMaxParam(PRESSURE);
+        dspNode.setParamValue(PRESSURE, minP + 0.6 * (maxP - minP));
+
+        // make sure the filter is active
+        dspNode.setParamValue(BYPASS, 0);
     });
 
 
@@ -55,7 +60,6 @@ brass.createDSP(audioContext, 1024)
 //==========================================================================================
 
 function accelerationChange(accx, accy, accz) {
-    // playAudio()
 }
 
 function rotationChange(rotx, roty, rotz) {
@@ -66,13 +70,13 @@ function rotationChange(rotx, roty, rotz) {
     const amount = tilt / 90;              // 0 = flat, 1 = vertical
 
     // flat = low frequency (muffled), upright = high frequency (open)
-    const [minFreq, maxFreq] = getMinMaxParam("/MOOG_VCF__Voltage_Controlled_Filter_/Corner_Frequency");
+    const [minFreq, maxFreq] = getMinMaxParam(CUTOFF);
     const freq = minFreq + amount * (maxFreq - minFreq);
-    dspNode.setParamValue("/MOOG_VCF__Voltage_Controlled_Filter_/Corner_Frequency", freq);
+    dspNode.setParamValue(CUTOFF, freq);
 }
 
 function mousePressed() {
-    audioContext.resume();
+    audioContext.resume();      // phones need one tap before any sound plays
 }
 
 function deviceMoved() {
@@ -83,10 +87,10 @@ function deviceMoved() {
 function deviceTurned() {
     threshVals[1] = turnAxis;
 }
+
 function deviceShaken() {
     shaketimer = millis();
     statusLabels[0].style("color", "pink");
-    playAudio();
 }
 
 function getMinMaxParam(address) {
@@ -94,18 +98,6 @@ function getMinMaxParam(address) {
     // ALWAYS PAY ATTENTION TO MIN AND MAX, ELSE YOU MAY GET REALLY HIGH VOLUMES FROM YOUR SPEAKERS
     return getParamMinMax(param);
 }
-
-//==========================================================================================
-// AUDIO INTERACTION
-//------------------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------------------
-// Edit here to define your audio controls 
-//------------------------------------------------------------------------------------------
-//
-//==========================================================================================
-
-
 
 //==========================================================================================
 // END
