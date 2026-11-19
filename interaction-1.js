@@ -109,7 +109,7 @@
         lastShakeTime = now;
 
         shaketimer = now;
-        statusLabels[0].style("color", "pink");
+        //statusLabels[0].style("color", "pink");
         pressure = pressure + 1;
         statusLabels[0].html("pressure: " + pressure);
         playBubbles();
@@ -149,7 +149,7 @@
     }
 
 
-   const MAX_PRESSURE = 25;      // same number you use for the pop
+   const MAX_PRESSURE = 5;      // same number you use for the pop
     function getBubbleMinMax(address) {
         const param = findByAddress(bellNodeParams, address);
         return getParamMinMax(param);
