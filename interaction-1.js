@@ -52,7 +52,7 @@ torpedo.createDSP(audioContext, 1024)
 //==========================================================================================
 
 function accelerationChange(accx, accy, accz) {
-    // playAudio()
+    
 }
 
 function rotationChange(rotx, roty, rotz) {
@@ -66,7 +66,7 @@ function mousePressed() {
 function deviceMoved() {
     movetimer = millis();
     statusLabels[2].style("color", "pink");
-    playAudio();
+    
 }
 
 function deviceTurned() {
@@ -76,7 +76,7 @@ function deviceTurned() {
 function deviceShaken() {
     shaketimer = millis();
     statusLabels[0].style("color", "pink");
-    playAudio();
+    
     
 }
 
