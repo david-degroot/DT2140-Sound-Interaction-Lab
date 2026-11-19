@@ -66,17 +66,17 @@ function rotationChange(rotx, roty, rotz) {
     if (!dspNode) {
         return;
     }
-    const tilt = Math.abs(roty);           // 0 to 180
-    const amount = tilt / 180;             // 0 = flat face up, 0.5 = upright, 1 = flat face down
+    const tilt = Math.max(-90, Math.min(roty, 90));   
+    const amount = (tilt + 90) / 180;                 
 
     const [minFreq, maxFreq] = getMinMaxParam(CUTOFF);
-    const low = minFreq + 0.35 * (maxFreq - minFreq);    // keep "closed" audible
+    const low = minFreq + 0.35 * (maxFreq - minFreq);    
     const freq = low + amount * (maxFreq - low);
     dspNode.setParamValue(CUTOFF, freq);
 }
 
 function mousePressed() {
-    //audioContext.resume();      // phones need one tap before any sound plays
+    //audioContext.resume();      
 }
 
 function deviceMoved() {
