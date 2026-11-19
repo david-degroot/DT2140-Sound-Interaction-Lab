@@ -78,7 +78,7 @@
     let pressure = 0;
     //let popped = false;
     let lastShakeTime = 0;
-    const SHAKE_COOLDOWN = 1000;   // milliseconds between bubble sounds
+    const SHAKE_COOLDOWN = 500;   // milliseconds between bubble sounds
 
     function rotationChange(rotx, roty, rotz) {
         const bottleUpright = rotx > 60 && rotx < 120;
