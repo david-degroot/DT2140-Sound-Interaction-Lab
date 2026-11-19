@@ -74,7 +74,7 @@
     function rotationChange(rotx, roty, rotz) {
         const bottleUpright = rotx > 60 && rotx < 120; 
         if (bottleUpright && pressure) {
-            playAudio();
+            //playAudio();
         }
     }
 
