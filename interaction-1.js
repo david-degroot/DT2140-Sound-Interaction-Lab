@@ -77,7 +77,7 @@
      
     function rotationChange(rotx, roty, rotz) {
         const bottleUpright = rotx > 60 && rotx < 120; 
-        if (bottleUpright && pressure) {
+        if (bottleUpright && pressure>25) {
             //playAudio();
             playAudio()
         }
@@ -114,6 +114,7 @@
         shaketimer = now;
         statusLabels[0].style("color", "pink");
         pressure = pressure + 1;
+        bellNode.setParamValue("/englishBell/strikeCutOff", pressure);
         playBubbles();
     }
 
