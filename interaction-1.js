@@ -19,9 +19,11 @@
     // output to window or npm package module
     if (typeof module === "undefined") {
         window[dspName] = instance;
+        window[bellFile] = instance;
     } else {
         const exp = {};
         exp[dspName] = instance;
+        exp[bellFile] = instance;
         module.exports = exp;
     }
 
