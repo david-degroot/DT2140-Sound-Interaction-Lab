@@ -44,13 +44,13 @@
 
     bells.createDSP(audioContext, 1024)
         .then(node => {
-            dspNode = node;
-            dspNode.connect(audioContext.destination);
-            console.log('params: ', dspNode.getParams());
-            const jsonString = dspNode.getJSON();
+            bellNode = node;
+            bellNode.connect(audioContext.destination);
+            console.log('params: ', bellNode.getParams());
+            const jsonString = bellNode.getJSON();
             jsonParams = JSON.parse(jsonString)["ui"][0]["items"];
-            dspNodeParams = jsonParams
-            // const exampleMinMaxParam = findByAddress(dspNodeParams, "/thunder/rumble");
+            bellNodeParams = jsonParams
+            // const exampleMinMaxParam = findByAddress(bellNodeParams, "/thunder/rumble");
             // // ALWAYS PAY ATTENTION TO MIN AND MAX, ELSE YOU MAY GET REALLY HIGH VOLUMES FROM YOUR SPEAKERS
             // const [exampleMinValue, exampleMaxValue] = getParamMinMax(exampleMinMaxParam);
             // console.log('Min value:', exampleMinValue, 'Max value:', exampleMaxValue);
