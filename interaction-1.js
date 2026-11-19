@@ -106,17 +106,17 @@
     // const SHAKE_COOLDOWN = 30;   // milliseconds between bubble sounds
 
     function deviceShaken() {
-        // const now = millis();
+        const now = millis();
         // if (now - lastShakeTime < SHAKE_COOLDOWN) {
         //     return;                // ignore shakes that come too fast
         // }
         // lastShakeTime = now;
 
         // shaketimer = now;
-        // statusLabels[0].style("color", "pink");
+        statusLabels[0].style("color", "pink");
         // pressure = pressure + 1;
         // //bellNode.setParamValue("/bubble/bubble/freq", pressure*100);
-        // playBubbles();
+        playBubbles();
     }
 
     function getMinMaxParam(address) {
