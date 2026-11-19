@@ -70,7 +70,7 @@ function deviceMoved() {
 
 function deviceTurned() {
     threshVals[1] = turnAxis;
-    playTorpedo();
+    playAudio();
 }
 function deviceShaken() {
     shaketimer = millis();
@@ -96,7 +96,7 @@ function getMinMaxParam(address) {
 //
 //==========================================================================================
 
-function playTorpedo() {
+function playAudio() {
     if (!dspNode) {
         return;
     }
