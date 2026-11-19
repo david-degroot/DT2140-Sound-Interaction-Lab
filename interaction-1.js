@@ -70,7 +70,7 @@ function deviceMoved() {
 }
 
 function deviceTurned() {
-    threshVals[1] = turnAxis;
+    threshVals[5] = turnAxis;
     playAudio();
 }
 function deviceShaken() {
