@@ -38,8 +38,8 @@ brass.createDSP(audioContext, 1024)
         // const [exampleMinValue, exampleMaxValue] = getParamMinMax(exampleMinMaxParam);
         // console.log('Min value:', exampleMinValue, 'Max value:', exampleMaxValue);
         // start blowing right away: 60% pressure, not the max
-        const [minP, maxP] = getMinMaxParam("/brass/blower/pressure");
-        dspNode.setParamValue("/brass/blower/pressure", minP + 0.6 * (maxP - minP));
+        const [minP, maxP] = getMinMaxParam("/brass/brass/blower/pressure");
+        dspNode.setParamValue("/brass/brass/blower/pressure", minP + 0.6 * (maxP - minP));
     });
 
 
@@ -105,16 +105,7 @@ function getMinMaxParam(address) {
 //
 //==========================================================================================
 
-function playAudio() {
-    if (!dspNode) {
-        return;
-    }
-    if (audioContext.state === 'suspended') {
-        return;
-    }
-    dspNode.setParamValue("/englishBell/gate", 1)
-    setTimeout(() => { dspNode.setParamValue("/englishBell/gate", 0) }, 100);
-}
+
 
 //==========================================================================================
 // END
