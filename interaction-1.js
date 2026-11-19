@@ -114,6 +114,7 @@
         shaketimer = now;
         statusLabels[0].style("color", "pink");
         pressure = pressure + 1;
+        console.log("Pressure: " + pressure);
         bellNode.setParamValue("/englishBell/strikeCutOff", pressure);
         playBubbles();
     }
