@@ -82,7 +82,7 @@
 
     function rotationChange(rotx, roty, rotz) {
         const bottleUpright = rotx > 60 && rotx < 120;
-        if (bottleUpright && pressure > MAX_PRESSURE) {
+        if (bottleUpright && pressure >= MAX_PRESSURE) {
             //popped = true;
             playAudio();
             //statusLabels[2].style("color", "blue");
