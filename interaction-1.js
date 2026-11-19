@@ -56,6 +56,9 @@ function accelerationChange(accx, accy, accz) {
 }
 
 function rotationChange(rotx, roty, rotz) {
+    if (rotx > threshVals[1]) {
+        playAudio();
+    }
 }
 
 function mousePressed() {
@@ -66,12 +69,13 @@ function mousePressed() {
 function deviceMoved() {
     movetimer = millis();
     statusLabels[2].style("color", "pink");
+    console.log(threshVals);
     
 }
 
 function deviceTurned() {
-    threshVals[10] = turnAxis;
-    playAudio();
+    threshVals[1] = turnAxis;
+    
 }
 function deviceShaken() {
     shaketimer = millis();
