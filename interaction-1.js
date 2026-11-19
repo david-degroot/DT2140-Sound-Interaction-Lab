@@ -15,15 +15,15 @@
     const dspName = "torpedo";
     const bellFile = "bells";
     const instance = new FaustWasm2ScriptProcessor(dspName);
-
+    const bellInstance = new FaustWasm2ScriptProcessor(bellFile);
     // output to window or npm package module
     if (typeof module === "undefined") {
         window[dspName] = instance;
-        window[bellFile] = instance;
+        window[bellFile] = bellInstance;
     } else {
         const exp = {};
         exp[dspName] = instance;
-        exp[bellFile] = instance;
+        exp[bellFile] = bellInstance;
         module.exports = exp;
     }
 
@@ -148,8 +148,8 @@
         // them printed on the console of your browser when you load the page)
         // For example if you change to a bell sound, here you could use "/churchBell/gate" instead of
         // "/thunder/rumble".
-        dspNode.setParamValue("/bells/trigger", 1)
-        setTimeout(() => { dspNode.setParamValue("/bells/trigger", 0) }, 100);
+        dspNode.setParamValue("/englishBell/gate", 1)
+        setTimeout(() => { dspNode.setParamValue("/englishBell/gate", 0) }, 100);
     }
 
     //==========================================================================================
