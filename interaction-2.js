@@ -1,21 +1,13 @@
 //==========================================================================================
 // AUDIO SETUP
-//------------------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------------------
-// Edit just where you're asked to!
-//------------------------------------------------------------------------------------------
-//
 //==========================================================================================
 let dspNode = null;
 let dspNodeParams = null;
 let jsonParams = null;
 
-// Change here to ("tuono") depending on your wasm file name
 const dspName = "brass";
 const instance = new FaustWasm2ScriptProcessor(dspName);
 
-// output to window or npm package module
 if (typeof module === "undefined") {
     window[dspName] = instance;
 } else {
@@ -24,99 +16,74 @@ if (typeof module === "undefined") {
     module.exports = exp;
 }
 
-// The name should be the same as the WASM file, so change tuono with brass if you use brass.wasm
-brass.createDSP(audioContext, 1024)
+const BYPASS    = "/MOOG_VCF__Voltage_Controlled_Filter_/0x00/Bypass";
+const CUTOFF    = "/MOOG_VCF__Voltage_Controlled_Filter_/Corner_Frequency";
+const RESONANCE = "/MOOG_VCF__Voltage_Controlled_Filter_/Corner_Resonance";
+const PRESSURE  = "/brass/blower/pressure";
+
+brass.createDSP(audioContext, 2048)
     .then(node => {
         dspNode = node;
         dspNode.connect(audioContext.destination);
         console.log('params: ', dspNode.getParams());
-        const jsonString = dspNode.getJSON();
-        jsonParams = JSON.parse(jsonString)["ui"][0]["items"];
-        dspNodeParams = jsonParams
-        // const exampleMinMaxParam = findByAddress(dspNodeParams, "/thunder/rumble");
-        // // ALWAYS PAY ATTENTION TO MIN AND MAX, ELSE YOU MAY GET REALLY HIGH VOLUMES FROM YOUR SPEAKERS
-        // const [exampleMinValue, exampleMaxValue] = getParamMinMax(exampleMinMaxParam);
-        // console.log('Min value:', exampleMinValue, 'Max value:', exampleMaxValue);
-        // start blowing right away: 60% pressure, not the max
-        const [minP, maxP] = getMinMaxParam("/brass/blower/pressure");
-        dspNode.setParamValue("/brass/blower/pressure", minP + 0.6 * (maxP - minP));
-    });
+        jsonParams = JSON.parse(dspNode.getJSON())["ui"][0]["items"];
+        dspNodeParams = jsonParams;
 
+        // make sure the filter is active, not bypassed
+        dspNode.setParamValue(BYPASS, 0);
+
+        // some resonance makes the sweep easy to hear (60% of its range)
+        const [minRes, maxRes] = getMinMaxParam(RESONANCE);
+        dspNode.setParamValue(RESONANCE, minRes + 0.6 * (maxRes - minRes));
+
+        // start blowing, only if the brass pressure control exists
+        if (findByAddress(dspNodeParams, PRESSURE)) {
+            const [minP, maxP] = getMinMaxParam(PRESSURE);
+            dspNode.setParamValue(PRESSURE, minP + 0.6 * (maxP - minP));
+        }
+    });
 
 //==========================================================================================
 // INTERACTIONS
-//------------------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------------------
-// Edit the next functions to create interactions
-// Decide which parameters you're using and then use playAudio to play the Audio
-//------------------------------------------------------------------------------------------
-//
 //==========================================================================================
 
 function accelerationChange(accx, accy, accz) {
-    // playAudio()
 }
 
 function rotationChange(rotx, roty, rotz) {
     if (!dspNode) {
         return;
     }
-    const tilt = Math.min(Math.abs(rotx), 90);
-    const amount = tilt / 90;              // 0 = flat, 1 = vertical
+    const tilt = Math.min(Math.abs(rotx), 60);
+    const amount = tilt / 60;                 // 0 = flat, 1 = tilted 60° or more
 
-    // flat = fully muted, upright = open
-    const [minMute, maxMute] = getMinMaxParam("/brass/brassModel/mute");
-    const mute = maxMute - amount * (maxMute - minMute);
-    dspNode.setParamValue("/brass/brassModel/mute", mute);
+    // filter closed (dark) when flat, open (bright) when tilted
+    const [minCut, maxCut] = getMinMaxParam(CUTOFF);
+    dspNode.setParamValue(CUTOFF, minCut + amount * (maxCut - minCut));
 
-    statusLabels[2].html("tilt: " + Math.round(tilt) + "  mute: " + mute.toFixed(2));
+    statusLabels[2].html("tilt: " + Math.round(tilt) + "  amount: " + amount.toFixed(2));
 }
 
 function mousePressed() {
-    // playAudio()
-    // Use this for debugging from the desktop!
+    audioContext.resume();      // phones need one tap before any sound plays
 }
 
 function deviceMoved() {
     movetimer = millis();
-    statusLabels[2].style("color", "pink");
 }
 
 function deviceTurned() {
     threshVals[1] = turnAxis;
 }
+
 function deviceShaken() {
     shaketimer = millis();
-    statusLabels[0].style("color", "pink");
-    playAudio();
 }
 
 function getMinMaxParam(address) {
     const param = findByAddress(dspNodeParams, address);
     // ALWAYS PAY ATTENTION TO MIN AND MAX, ELSE YOU MAY GET REALLY HIGH VOLUMES FROM YOUR SPEAKERS
     return getParamMinMax(param);
-}
-
-//==========================================================================================
-// AUDIO INTERACTION
-//------------------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------------------
-// Edit here to define your audio controls 
-//------------------------------------------------------------------------------------------
-//
-//==========================================================================================
-
-function playAudio() {
-    if (!dspNode) {
-        return;
-    }
-    if (audioContext.state === 'suspended') {
-        return;
-    }
-    dspNode.setParamValue("/englishBell/gate", 1)
-    setTimeout(() => { dspNode.setParamValue("/englishBell/gate", 0) }, 100);
 }
 
 //==========================================================================================
