@@ -79,7 +79,8 @@
         const bottleUpright = rotx > 60 && rotx < 120; 
         if (bottleUpright && pressure>25) {
             //playAudio();
-            playAudio()
+            playAudio();
+             
         }
     }
 
@@ -92,7 +93,7 @@
     function deviceMoved() {
         movetimer = millis();
         statusLabels[2].style("color", "pink");
-        console.log(threshVals);
+        
         playBubbles();
     }
 
@@ -100,22 +101,22 @@
         threshVals[1] = turnAxis;
         
     }
-    let pressure = 0;
-    let lastShakeTime = 0;
-    const SHAKE_COOLDOWN = 30;   // milliseconds between bubble sounds
+    // let pressure = 0;
+    // let lastShakeTime = 0;
+    // const SHAKE_COOLDOWN = 30;   // milliseconds between bubble sounds
 
     function deviceShaken() {
         const now = millis();
-        if (now - lastShakeTime < SHAKE_COOLDOWN) {
-            return;                // ignore shakes that come too fast
-        }
-        lastShakeTime = now;
+        // if (now - lastShakeTime < SHAKE_COOLDOWN) {
+        //     return;                // ignore shakes that come too fast
+        // }
+        // lastShakeTime = now;
 
         shaketimer = now;
         statusLabels[0].style("color", "pink");
         pressure = pressure + 1;
-        bellNode.setParamValue("/bubble/bubble/freq", pressure*100);
-        
+        //bellNode.setParamValue("/bubble/bubble/freq", pressure*100);
+        playBubbles();
     }
 
     function getMinMaxParam(address) {
