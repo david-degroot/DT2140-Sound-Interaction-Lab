@@ -76,7 +76,7 @@ function rotationChange(rotx, roty, rotz) {
 }
 
 function mousePressed() {
-    audioContext.resume();      // phones need one tap before any sound plays
+    //audioContext.resume();      // phones need one tap before any sound plays
 }
 
 function deviceMoved() {
@@ -97,6 +97,13 @@ function getMinMaxParam(address) {
     const param = findByAddress(dspNodeParams, address);
     // ALWAYS PAY ATTENTION TO MIN AND MAX, ELSE YOU MAY GET REALLY HIGH VOLUMES FROM YOUR SPEAKERS
     return getParamMinMax(param);
+}
+//==========================================================================================
+// AUDIO INTERACTION
+//==========================================================================================
+
+function playAudio() {
+    // not used: the brass plays continuously and tilt controls the filter
 }
 
 //==========================================================================================
