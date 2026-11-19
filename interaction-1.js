@@ -115,7 +115,7 @@
         statusLabels[0].style("color", "pink");
         pressure = pressure + 1;
         console.log("Pressure: " + pressure);
-        bellNode.setParamValue("/englishBell/strikeCutOff", pressure);
+        bellNode.setParamValue("/bubble/bubble/freq", pressure*100);
         playBubbles();
     }
 
