@@ -9,6 +9,8 @@
     //==========================================================================================
     let dspNode = null;
     let dspNodeParams = null;
+    let bellNode = null;
+    let bellNodeParams = null;
     let jsonParams = null;
 
     // Change here to ("tuono") depending on your wasm file name
