@@ -155,8 +155,8 @@
         if (!bellNode || audioContext.state === 'suspended') {
         return;
         }
-            bellNode.setParamValue("/englishBell/gate", 1);
-            setTimeout(() => { bellNode.setParamValue("/englishBell/gate", 0) }, 100);
+            bellNode.setParamValue("bubble/drop", 1);
+            setTimeout(() => { bellNode.setParamValue("/bubble/drop", 0) }, 100);
         }
 
     //==========================================================================================
