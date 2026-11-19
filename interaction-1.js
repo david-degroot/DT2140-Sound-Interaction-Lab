@@ -84,7 +84,7 @@
         const bottleUpright = rotx > 60 && rotx < 120;
         if (bottleUpright && pressure > 25) {
             //popped = true;          // pop only once
-            //playAudio();
+            playAudio();
             statusLabels[2].style("color", "blue");
         }
     }
