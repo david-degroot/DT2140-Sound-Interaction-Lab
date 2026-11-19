@@ -100,9 +100,18 @@
         threshVals[1] = turnAxis;
         
     }
-    let pressure = 0;  
+    let pressure = 0;
+    let lastShakeTime = 0;
+    const SHAKE_COOLDOWN = 300;   // milliseconds between bubble sounds
+
     function deviceShaken() {
-        shaketimer = millis();
+        const now = millis();
+        if (now - lastShakeTime < SHAKE_COOLDOWN) {
+            return;                // ignore shakes that come too fast
+        }
+        lastShakeTime = now;
+
+        shaketimer = now;
         statusLabels[0].style("color", "pink");
         pressure = pressure + 1;
         playBubbles();
