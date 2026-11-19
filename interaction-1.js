@@ -93,7 +93,7 @@
     function mousePressed() {
         //playAudio();               // desktop test
 
-        playBubbles();              // desktop test
+       // playBubbles();              // desktop test
     }
 
     function deviceMoved() {
@@ -151,7 +151,7 @@
     }
 
 
-   const MAX_PRESSURE = 5;      // same number you use for the pop
+   const MAX_PRESSURE = 15;      // same number you use for the pop
     function getBubbleMinMax(address) {
         const param = findByAddress(bellNodeParams, address);
         return getParamMinMax(param);
