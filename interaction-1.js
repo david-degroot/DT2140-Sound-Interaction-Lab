@@ -82,10 +82,10 @@
 
     function rotationChange(rotx, roty, rotz) {
         const bottleUpright = rotx > 60 && rotx < 120;
-        if (bottleUpright && pressure > MAX_PRESSURE && !popped) {
-            popped = true;
+        if (bottleUpright && pressure > MAX_PRESSURE) {
+            //popped = true;
             playAudio();
-            statusLabels[2].style("color", "blue");
+            //statusLabels[2].style("color", "blue");
         }
     }
 
@@ -103,16 +103,16 @@
 
     function deviceShaken() {
         const now = millis();
-        if (now - lastShakeTime < SHAKE_COOLDOWN) {
-            return;
-        }
-        lastShakeTime = now;
+        // if (now - lastShakeTime < SHAKE_COOLDOWN) {
+        //     return;
+        // }
+        // lastShakeTime = now;
 
-        shaketimer = now;
-        //statusLabels[0].style("color", "pink");
-        pressure = pressure + 1;
-        statusLabels[0].html("pressure: " + pressure);
-        playBubbles();
+        // shaketimer = now;
+        // //statusLabels[0].style("color", "pink");
+        // pressure = pressure + 1;
+        // statusLabels[0].html("pressure: " + pressure);
+        // playBubbles();
     }
 
     function getMinMaxParam(address) {
