@@ -111,6 +111,7 @@
         shaketimer = now;
         statusLabels[0].style("color", "pink");
         pressure = pressure + 1;
+        statusLabels[0].html("pressure: " + pressure);
         playBubbles();
     }
 
