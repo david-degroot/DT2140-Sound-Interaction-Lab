@@ -90,6 +90,8 @@
     }
 
     function mousePressed() {
+        //playAudio();               // desktop test
+
         playBubbles();              // desktop test
     }
 
@@ -146,7 +148,10 @@
 
 
    const MAX_PRESSURE = 25;      // same number you use for the pop
-
+    function getBubbleMinMax(address) {
+        const param = findByAddress(bellNodeParams, address);
+        return getParamMinMax(param);
+    }
     function playBubbles() {
         if (!bellNode || audioContext.state === 'suspended') {
             return;
