@@ -75,47 +75,39 @@
     }
 
      
+    let pressure = 0;
+    let popped = false;
+    let lastShakeTime = 0;
+    const SHAKE_COOLDOWN = 300;   // milliseconds between bubble sounds
+
     function rotationChange(rotx, roty, rotz) {
-        const bottleUpright = rotx > 60 && rotx < 120; 
-        if (bottleUpright && pressure>25) {
+        const bottleUpright = rotx > 60 && rotx < 120;
+        if (bottleUpright && pressure > 25 && !popped) {
+            popped = true;          // pop only once
             //playAudio();
-            playAudio();
-             
+            statusLabels[2].style("color", "red");
         }
     }
 
     function mousePressed() {
-        
-        playBubbles();
-        // Use this for debugging from the desktop!
+        playBubbles();              // desktop test
     }
 
     function deviceMoved() {
         movetimer = millis();
-        statusLabels[2].style("color", "pink");
-        
-        playBubbles();
+        //statusLabels[2].style("color", "pink");
     }
-
-    function deviceTurned() {
-        threshVals[1] = turnAxis;
-        
-    }
-    // let pressure = 0;
-    // let lastShakeTime = 0;
-    // const SHAKE_COOLDOWN = 30;   // milliseconds between bubble sounds
 
     function deviceShaken() {
         const now = millis();
-        // if (now - lastShakeTime < SHAKE_COOLDOWN) {
-        //     return;                // ignore shakes that come too fast
-        // }
-        // lastShakeTime = now;
+        if (now - lastShakeTime < SHAKE_COOLDOWN) {
+            return;
+        }
+        lastShakeTime = now;
 
-        // shaketimer = now;
+        shaketimer = now;
         statusLabels[0].style("color", "pink");
-        // pressure = pressure + 1;
-        // //bellNode.setParamValue("/bubble/bubble/freq", pressure*100);
+        pressure = pressure + 1;
         playBubbles();
     }
 
@@ -152,6 +144,8 @@
         setTimeout(() => { dspNode.setParamValue("/torpedo/trigger", 0) }, 100);
     }
 
+
+    const MAX_PRESSURE = 25;
     function playBubbles() {
         if (!bellNode || audioContext.state === 'suspended') {
         return;
