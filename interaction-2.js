@@ -76,7 +76,7 @@ function rotationChange(rotx, roty, rotz) {
 }
 
 function mousePressed() {
-    //audioContext.resume();      
+    audioContext.resume();      
 }
 
 function deviceMoved() {
