@@ -138,19 +138,12 @@
     }
 
     function playBubbles() {
-        if (!dspNode) {
-            return;
+        if (!bellNode || audioContext.state === 'suspended') {
+        return;
         }
-        if (audioContext.state === 'suspended') {
-            return;
+            bellNode.setParamValue("/englishBell/gate", 1);
+            setTimeout(() => { bellNode.setParamValue("/englishBell/gate", 0) }, 100);
         }
-        // Edit here the addresses ("/thunder/rumble") depending on your WASM controls (you can see 
-        // them printed on the console of your browser when you load the page)
-        // For example if you change to a bell sound, here you could use "/churchBell/gate" instead of
-        // "/thunder/rumble".
-        dspNode.setParamValue("/englishBell/gate", 1)
-        setTimeout(() => { dspNode.setParamValue("/englishBell/gate", 0) }, 100);
-    }
 
     //==========================================================================================
     // END
