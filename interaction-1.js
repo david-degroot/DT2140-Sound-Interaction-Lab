@@ -93,7 +93,7 @@
         movetimer = millis();
         statusLabels[2].style("color", "pink");
         console.log(threshVals);
-        
+        playBubbles();
     }
 
     function deviceTurned() {
@@ -115,7 +115,7 @@
         statusLabels[0].style("color", "pink");
         pressure = pressure + 1;
         bellNode.setParamValue("/bubble/bubble/freq", pressure*100);
-        playBubbles();
+        
     }
 
     function getMinMaxParam(address) {
