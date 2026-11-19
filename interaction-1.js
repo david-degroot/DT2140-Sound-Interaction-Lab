@@ -103,12 +103,12 @@
 
     function deviceShaken() {
         const now = millis();
-        if (now - lastShakeTime < SHAKE_COOLDOWN) {
-            return;
-        }
-        lastShakeTime = now;
+        // if (now - lastShakeTime < SHAKE_COOLDOWN) {
+        //     return;
+        // }
+        // lastShakeTime = now;
 
-        shaketimer = now;
+        // shaketimer = now;
         //statusLabels[0].style("color", "pink");
         if (pressure < MAX_PRESSURE) {
             pressure = pressure + 1;
