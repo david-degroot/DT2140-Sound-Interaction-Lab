@@ -103,17 +103,19 @@
 
     function deviceShaken() {
         const now = millis();
-        // if (now - lastShakeTime < SHAKE_COOLDOWN) {
-        //     return;
-        // }
-        // lastShakeTime = now;
+        if (now - lastShakeTime < SHAKE_COOLDOWN) {
+            return;
+        }
+        lastShakeTime = now;
 
-        // shaketimer = now;
-        statusLabels[0].style("color", "pink");
+        //shaketimer = now;
+        //statusLabels[0].style("color", "pink");
+        
+        statusLabels[0].html("pressure: " + pressure);
         if (pressure < MAX_PRESSURE) {
             pressure = pressure + 1;
+            
         }
-        statusLabels[0].html("pressure: " + pressure);
         playBubbles();
     }
 
