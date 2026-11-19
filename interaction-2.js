@@ -12,7 +12,7 @@ let dspNodeParams = null;
 let jsonParams = null;
 
 // Change here to ("tuono") depending on your wasm file name
-const dspName = "bells";
+const dspName = "brass";
 const instance = new FaustWasm2ScriptProcessor(dspName);
 
 // output to window or npm package module
@@ -25,7 +25,7 @@ if (typeof module === "undefined") {
 }
 
 // The name should be the same as the WASM file, so change tuono with brass if you use brass.wasm
-bells.createDSP(audioContext, 1024)
+brass.createDSP(audioContext, 1024)
     .then(node => {
         dspNode = node;
         dspNode.connect(audioContext.destination);
@@ -37,6 +37,9 @@ bells.createDSP(audioContext, 1024)
         // // ALWAYS PAY ATTENTION TO MIN AND MAX, ELSE YOU MAY GET REALLY HIGH VOLUMES FROM YOUR SPEAKERS
         // const [exampleMinValue, exampleMaxValue] = getParamMinMax(exampleMinMaxParam);
         // console.log('Min value:', exampleMinValue, 'Max value:', exampleMaxValue);
+        // start blowing right away: 60% pressure, not the max
+        const [minP, maxP] = getMinMaxParam("/brass/blower/pressure");
+        dspNode.setParamValue("/brass/blower/pressure", minP + 0.6 * (maxP - minP));
     });
 
 
@@ -56,6 +59,18 @@ function accelerationChange(accx, accy, accz) {
 }
 
 function rotationChange(rotx, roty, rotz) {
+    if (!dspNode) {
+        return;
+    }
+    const tilt = Math.min(Math.abs(rotx), 90);
+    const amount = tilt / 90;              // 0 = flat, 1 = vertical
+
+    // flat = fully muted, upright = open
+    const [minMute, maxMute] = getMinMaxParam("/brass/brassModel/mute");
+    const mute = maxMute - amount * (maxMute - minMute);
+    dspNode.setParamValue("/brass/brassModel/mute", mute);
+
+    statusLabels[2].html("tilt: " + Math.round(tilt) + "  mute: " + mute.toFixed(2));
 }
 
 function mousePressed() {
@@ -78,11 +93,9 @@ function deviceShaken() {
 }
 
 function getMinMaxParam(address) {
-    const exampleMinMaxParam = findByAddress(dspNodeParams, address);
+    const param = findByAddress(dspNodeParams, address);
     // ALWAYS PAY ATTENTION TO MIN AND MAX, ELSE YOU MAY GET REALLY HIGH VOLUMES FROM YOUR SPEAKERS
-    const [exampleMinValue, exampleMaxValue] = getParamMinMax(exampleMinMaxParam);
-    console.log('Min value:', exampleMinValue, 'Max value:', exampleMaxValue);
-    return [exampleMinValue, exampleMaxValue]
+    return getParamMinMax(param);
 }
 
 //==========================================================================================

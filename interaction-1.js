@@ -109,7 +109,7 @@
         // lastShakeTime = now;
 
         // shaketimer = now;
-        //statusLabels[0].style("color", "pink");
+        statusLabels[0].style("color", "pink");
         if (pressure < MAX_PRESSURE) {
             pressure = pressure + 1;
         }
