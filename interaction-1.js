@@ -107,10 +107,10 @@
 
     function deviceShaken() {
         const now = millis();
-        // if (now - lastShakeTime < SHAKE_COOLDOWN) {
-        //     return;                // ignore shakes that come too fast
-        // }
-        // lastShakeTime = now;
+        if (now - lastShakeTime < SHAKE_COOLDOWN) {
+            return;                // ignore shakes that come too fast
+        }
+        lastShakeTime = now;
 
         shaketimer = now;
         statusLabels[0].style("color", "pink");
