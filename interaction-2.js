@@ -72,8 +72,7 @@ function rotationChange(rotx, roty, rotz) {
 }
 
 function mousePressed() {
-    // playAudio()
-    // Use this for debugging from the desktop!
+    audioContext.resume();
 }
 
 function deviceMoved() {
