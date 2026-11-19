@@ -102,7 +102,7 @@
     }
     let pressure = 0;
     let lastShakeTime = 0;
-    const SHAKE_COOLDOWN = 300;   // milliseconds between bubble sounds
+    const SHAKE_COOLDOWN = 30;   // milliseconds between bubble sounds
 
     function deviceShaken() {
         const now = millis();
@@ -114,7 +114,6 @@
         shaketimer = now;
         statusLabels[0].style("color", "pink");
         pressure = pressure + 1;
-        console.log("Pressure: " + pressure);
         bellNode.setParamValue("/bubble/bubble/freq", pressure*100);
         playBubbles();
     }
