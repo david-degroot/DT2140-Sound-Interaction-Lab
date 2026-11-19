@@ -66,12 +66,12 @@ function rotationChange(rotx, roty, rotz) {
     if (!dspNode) {
         return;
     }
-    const tilt = Math.min(Math.abs(roty), 180);
-    const amount = tilt / 180;              // 0 = flat, 1 = vertical
+    const tilt = Math.abs(roty);           // 0 to 180
+    const amount = tilt / 180;             // 0 = flat face up, 0.5 = upright, 1 = flat face down
 
-    // flat = low frequency (muffled), upright = high frequency (open)
     const [minFreq, maxFreq] = getMinMaxParam(CUTOFF);
-    const freq = minFreq + amount * (maxFreq - minFreq);
+    const low = minFreq + 0.35 * (maxFreq - minFreq);    // keep "closed" audible
+    const freq = low + amount * (maxFreq - low);
     dspNode.setParamValue(CUTOFF, freq);
 }
 
