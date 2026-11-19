@@ -66,8 +66,8 @@ function rotationChange(rotx, roty, rotz) {
     if (!dspNode) {
         return;
     }
-    const tilt = Math.min(Math.abs(roty), 90);
-    const amount = tilt / 90;              // 0 = flat, 1 = vertical
+    const tilt = Math.min(Math.abs(roty), 180);
+    const amount = tilt / 180;              // 0 = flat, 1 = vertical
 
     // flat = low frequency (muffled), upright = high frequency (open)
     const [minFreq, maxFreq] = getMinMaxParam(CUTOFF);
