@@ -79,11 +79,13 @@
         const bottleUpright = rotx > 60 && rotx < 120; 
         if (bottleUpright && pressure) {
             //playAudio();
+            playAudio()
         }
     }
 
     function mousePressed() {
-        //playAudio()
+        
+        playBubbles();
         // Use this for debugging from the desktop!
     }
 
